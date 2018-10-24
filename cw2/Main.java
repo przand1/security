@@ -46,27 +46,28 @@ public class Main {
 
     SecureRandom rand = new SecureRandom();
     BigInteger prime = BigInteger.probablePrime(numOfBits,rand);
-    System.out.println("PRIME: "+prime);
+    System.out.println("\nPRIME: "+prime+'\n');
 
     BigInteger secret = new BigInteger(rand.nextInt(numOfBits),rand).mod(prime);
-    System.out.println("SECRET: "+secret);
+    System.out.println("Współczynniki wielomianu:\nSECRET (a_0): "+secret);
     BigInteger[] polynomial = new BigInteger[k];
     polynomial[0] = secret;
 
     for (int i=1;i<k ;i++ ) {
       polynomial[i]=new BigInteger(rand.nextInt(numOfBits),rand).mod(prime);
-      System.out.println("polynomial["+i+"]: "+polynomial[i]);
+      System.out.println("a_"+i+": "+polynomial[i]);
     }
     //mamy: wpółczynniki wielomianu a_0,...,a_k; a_0 to sekret.
-    System.out.println("poly(0) = "+getPolyVal(polynomial,BigInteger.ZERO));
+    System.out.println("\nP(0) = "+getPolyVal(polynomial,BigInteger.ZERO));
 
     //skonstruować n punktów (x,W(x)) zaczynając od x=1
     //każdy dostałby jeden punkt, potrzebują k punktów do odtworzenia wielomianu
     BigInteger[] points = new BigInteger[n];
     for (int i=0;i<n ;i++ ) {
       points[i] = getPolyVal(polynomial, BigInteger.valueOf(i+1));
-      System.out.println("poly("+(i+1)+") = "+points[i]);
+      System.out.println("P("+(i+1)+") = "+points[i]);
     }
+    System.out.println();
 
     //wybrać k punktów z n.
     BigInteger[] b = Arrays.copyOfRange(points,0,k);
@@ -75,8 +76,9 @@ public class Main {
       ks[i-1] = i;
       System.out.println("Punkt "+i+": ("+ks[i-1]+","+b[i-1]+")");
     }
-    //interpolacja Lagrange'a dla tych punktów. Jak to zrobić?
-    System.out.println("Obliczono sekret: "+getLagrInterPoly(ks,b));
+    System.out.println();
+    //interpolacja Lagrange'a dla tych punktów. Potrzene tylko a0.
+    System.out.println("Obliczono sekret: "+getLagrInterPoly(ks,b)+'\n');
     //wyraz wolny wyznaczonego wielomianu to szukany sekret. Sprawdzić czy się zgadza.
   }
 }
