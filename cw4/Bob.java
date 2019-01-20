@@ -33,18 +33,18 @@ public class Bob {
 //WERYFIKACJA
 //odczytanie klucza
 System.out.println("Odczyt klucza...");
-      FileInputStream aliceKeyFIS = new FileInputStream("/home/q/security/cw4/AlicePublicKey");
+      FileInputStream aliceKeyFIS = new FileInputStream("/home/students/s394995/Rok3/security/cw4/AlicePublicKey");
       byte[] encAliceKey = new byte[aliceKeyFIS.available()];
       aliceKeyFIS.read(encAliceKey);
       aliceKeyFIS.close();
 //konwersja
-System.out.println("Konwesja...");
+System.out.println("Konwersja...");
       X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(encAliceKey);
       KeyFactory keyFactory = KeyFactory.getInstance("DSA","SUN");
       PublicKey aliceKey = keyFactory.generatePublic(pubKeySpec);
 //odczytanie podpisu
 System.out.println("Odczyt podpisu...");
-      FileInputStream sigFIS = new FileInputStream("/home/q/security/cw4/AliceSignature");
+      FileInputStream sigFIS = new FileInputStream("/home/students/s394995/Rok3/security/cw4/AliceSignature");
       byte[] sigToVerify = new byte[sigFIS.available()];
       sigFIS.read(sigToVerify);
       sigFIS.close();
@@ -103,7 +103,10 @@ System.out.print("Weryfikacja... ");
       clientSocket.close();
     } catch (ConnectException c) {
       System.out.println("Connection refused. Is server on?");
-    } catch(Exception e) {
+    } catch (FileNotFoundException f) {
+      System.out.println("File not found. Check file paths in BOTH classes.");
+    }
+     catch(Exception e) {
       e.printStackTrace();
     }
   }

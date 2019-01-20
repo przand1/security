@@ -11,7 +11,7 @@ public class Alice {
 
   public static void main(String[] args) {
     try{
-      
+
       //utwórz połączenie
       ServerSocket serverSocket = new ServerSocket(9999);
       System.out.println(InetAddress.getByName("localhost"));
@@ -64,11 +64,12 @@ System.out.println("Tworzenie kluczy...");
 System.out.println("Podpisywanie...");
     byte[] sigA = dsa.sign();
 //zapis podpisu i klucza do pliku
-    FileOutputStream sigfos = new FileOutputStream("/home/q/security/cw4/AliceSignature");
+System.out.println("Zapis do pliku...");
+    FileOutputStream sigfos = new FileOutputStream("/home/students/s394995/Rok3/security/cw4/AliceSignature");
     sigfos.write(sigA);
     sigfos.close();
     byte[] key = pub.getEncoded();
-    FileOutputStream keyfos = new FileOutputStream("/home/q/security/cw4/AlicePublicKey");
+    FileOutputStream keyfos = new FileOutputStream("/home/students/s394995/Rok3/security/cw4/AlicePublicKey");
     keyfos.write(key);
     keyfos.close();
 //========================================================================================
@@ -111,6 +112,8 @@ System.out.println("Podpisywanie...");
 
       serverSocket.close();
       clientSocket.close();
+    }catch(EOFException eof){
+      System.out.println("EOF Exception. Check key and signature file paths in BOTH classes.");
     }catch(Exception e){
       e.printStackTrace();
     }
