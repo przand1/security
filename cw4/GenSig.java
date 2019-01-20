@@ -12,6 +12,7 @@ class GenSig {
         }
         else try {
 
+          //generowanie kluczy
           KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
           SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
           keyGen.initialize(1024, random);
@@ -19,8 +20,11 @@ class GenSig {
           PrivateKey priv = pair.getPrivate();
           PublicKey pub = pair.getPublic();
 
+          //inicjalizacja
           Signature dsa = Signature.getInstance("SHA1withDSA", "SUN");
           dsa.initSign(priv);
+
+          //czytanie pliku - trzeba zmienić na param. DH
           FileInputStream fis = new FileInputStream(args[0]);
           BufferedInputStream bufin = new BufferedInputStream(fis);
           byte[] buffer = new byte[1024];
@@ -30,6 +34,7 @@ class GenSig {
           };
           bufin.close();
 
+          //tworzenie podpisu
           byte[] realSig = dsa.sign();
 
           /* save the signature in a file */
@@ -43,7 +48,7 @@ class GenSig {
           keyfos.write(key);
           keyfos.close();
 
-          
+
 
         } catch (Exception e) {
             System.err.println("Caught exception " + e.toString());
