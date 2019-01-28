@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 
 public class CommitedGraph {
 
@@ -27,10 +28,10 @@ public class CommitedGraph {
   public byte[][][] getCommGraphTable() {return commGraphTable;}
 
   // przypadek 1: ujawnij cykl Hamiltona:
-  public byte[][][] getHCHashes() {
+  // public byte[][][] getHCHashes() {
+  //
+  // }
 
-  }
-  
   //przypadek 2: ujawnij graf i izomorfizm:
   public List<byte[]> getCommIsomorph() {return commIsomorph;}
   public byte[][] getGraphSeeds() {return graphSeeds;}
@@ -81,7 +82,7 @@ public class CommitedGraph {
 
   private void commitIsomorph() {
     for (int i = 0;i < isomorph.size();i++) {
-      md.update((byte)isomorph.get(i));
+      md.update(BigInteger.valueOf(isomorph.get(i)).toByteArray()); // zmiana int na byte[], bo int nie wchodzi
       md.update(isoSeeds[i]);
       byte[] b = md.digest();
       commIsomorph.add(b);
