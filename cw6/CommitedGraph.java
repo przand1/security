@@ -23,14 +23,19 @@ public class CommitedGraph {
   private HGraph G; // graf bazowy, na którym będziemy pracować. Później można załadować kolejny.
   private List<Integer> isomorph; // izomorfizm z którego powstał graf bazowy
 
+  // Alice wysyła zakryty graf do Boba
+  public byte[][][] getCommGraphTable() {return commGraphTable;}
+
   // przypadek 1: ujawnij cykl Hamiltona:
   public byte[][][] getHCHashes() {
 
   }
-  public
+  
   //przypadek 2: ujawnij graf i izomorfizm:
-  public byte[][][] getCommGraphTable() {return commGraphTable;}
   public List<byte[]> getCommIsomorph() {return commIsomorph;}
+  public byte[][] getGraphSeeds() {return graphSeeds;}
+  public byte[] isoSeeds() {return isoSeeds;}
+  //
 
 
 
