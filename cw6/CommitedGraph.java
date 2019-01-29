@@ -55,12 +55,12 @@ public class CommitedGraph {
     int verts = G.getVerts();
     commGraphTable = new byte[verts][verts][];
     graphSeeds = new byte[verts][verts];
-    for (byte[] row : graphSeeds ) {
-      rand.nextBytes(row);
-      for (byte b : row ) {
-        System.out.print(b+" ");
-      }System.out.println();
-    }
+    // for (byte[] row : graphSeeds ) {
+    //   rand.nextBytes(row);
+    //   for (byte b : row ) {
+    //     System.out.print(b+" ");
+    //   }System.out.println();
+    // }
     isoSeeds = new byte[verts];
     rand.nextBytes(isoSeeds);
   }

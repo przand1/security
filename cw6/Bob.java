@@ -2,6 +2,7 @@ package cw6;
 
 import java.net.*;
 import java.io.*;
+import java.util.Arrays;
 
 public class Bob {
 
@@ -15,11 +16,30 @@ public class Bob {
       DataInputStream clientInput = new DataInputStream(clientSocket.getInputStream());
       DataOutputStream clientOutput = new DataOutputStream(clientSocket.getOutputStream());
 
-
+      GraphPrinter gp = new GraphPrinter();
 
       // 2. Odebrać G od Alice
-
+      int verts = clientInput.readInt();
+      boolean[][] G = new boolean[verts][verts];
+      for (int i=0;i<verts;i++) {
+        for (int j=0;j<verts;j++) {
+          G[i][j] = clientInput.readBoolean();
+        }
+      }
+      gp.printGraph(G);
       // 4. Odebrać zakryty G'
+      byte[] buffer = new byte[256];
+      int len;
+      byte[][][] G1 = new byte[verts][verts][100];
+      for (int i=0;i<verts;i++) {
+        for (int j=0;j<verts;j++) {
+          // len = clientInput.read(buffer);
+          // System.out.println(len);
+          // G1[i][j] = Arrays.copyOf(buffer,len);
+          clientInput.read(G1[i][j]);
+        }
+      }
+      gp.printGraph(G1);
 
       // 5. Rzut monetą
 

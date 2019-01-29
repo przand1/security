@@ -34,17 +34,22 @@ public class Alice {
       gp.printGraph(G.getGraphTable());
 
     // 2. Bob zna G bez cyklu
-    //TODO wysłać G do Boba
+    clientOutput.writeInt(VERTS); // rozmiar grafus
+    for (boolean[] B : G.getGraphTable() ) { // macierz grafu
+      for (boolean BB : B ) {
+        clientOutput.writeBoolean(BB);
+      }
+    }
 
     // 5 rund
-    for (int i=0;i<5 ;i++ ) {
+    //for (int i=0;i<5 ;i++ ) {
 
       // 3a. Alice generuje graf izomorficzny
       List<Integer> iso = G.isomorphism();
-        System.out.println("ISO: "+iso.toString());
+        //System.out.println("ISO: "+iso.toString());
       HGraph isoGraph = new HGraph(G,iso);
-        System.out.println("ISO_G_CYCLE: "+isoGraph.getHCycle().toString());
-        gp.printGraph(isoGraph.getGraphTable());
+        //System.out.println("ISO_G_CYCLE: "+isoGraph.getHCycle().toString());
+        //gp.printGraph(isoGraph.getGraphTable());
 
       // 3b. Alice wykonuje zobowiązanie bitowe dla M_G oraz numeracji wierszy i kolumn
       CommitedGraph cg = new CommitedGraph("SHA-256");
@@ -53,7 +58,15 @@ public class Alice {
         gp.printGraph(cg.getCommGraphTable());
 
       // 4. Wysyła zakryty graf do Boba
-      // TODO wysłać zakryty
+      for (byte[][] bb : cg.getCommGraphTable()) {
+        for (byte[] b : bb) {
+          // for (byte B:b) {
+          //   clientOutput.write(B);
+          // }
+          clientSocket.getOutputStream().write(b);
+        }
+      }
+
 
       // 5. Bob rzuca monetą
       // TODO read
@@ -63,7 +76,7 @@ public class Alice {
         // 6. Ujawnia G' + numeracja w i k
 
 
-    }
+    //}
 
     serverSocket.close();
     clientSocket.close();
