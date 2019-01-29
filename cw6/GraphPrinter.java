@@ -21,5 +21,12 @@ public class GraphPrinter {
       }System.out.print('\n');
     }
   }
+  public static void printVals(byte[][] vals) {
+    for (byte[] b:vals) {
+      for (byte by : b ) {
+        System.out.printf("%d ",by);
+      }System.out.print("\n");
+    }
+  }
 
 }

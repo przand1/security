@@ -44,39 +44,61 @@ public class Alice {
     // 5 rund
     //for (int i=0;i<5 ;i++ ) {
 
-      // 3a. Alice generuje graf izomorficzny
-      List<Integer> iso = G.isomorphism();
-        //System.out.println("ISO: "+iso.toString());
-      HGraph isoGraph = new HGraph(G,iso);
-        //System.out.println("ISO_G_CYCLE: "+isoGraph.getHCycle().toString());
-        //gp.printGraph(isoGraph.getGraphTable());
+        // 3a. Alice generuje graf izomorficzny
+        List<Integer> iso = G.isomorphism();
+          System.out.println("ISO: "+iso.toString());
+        HGraph isoGraph = new HGraph(G,iso);
+          System.out.println("ISO_G_CYCLE: "+isoGraph.getHCycle().toString());
+          gp.printGraph(isoGraph.getGraphTable());
 
-      // 3b. Alice wykonuje zobowiązanie bitowe dla M_G oraz numeracji wierszy i kolumn
-      CommitedGraph cg = new CommitedGraph("SHA-256");
-      cg.loadGraph(isoGraph,iso);
-      cg.commit();
-        gp.printGraph(cg.getCommGraphTable());
+        // 3b. Alice wykonuje zobowiązanie bitowe dla M_G oraz numeracji wierszy i kolumn
+        CommitedGraph cg = new CommitedGraph("SHA-256"); // macierz grafu
+        cg.loadGraph(isoGraph,iso);
+        cg.commit();
+          gp.printGraph(cg.getCommGraphTable());
 
-      // 4. Wysyła zakryty graf do Boba
-      for (byte[][] bb : cg.getCommGraphTable()) {
-        for (byte[] b : bb) {
-          // for (byte B:b) {
-          //   clientOutput.write(B);
-          // }
-          clientSocket.getOutputStream().write(b);
+        // 4. Wysyła zakryty graf do Boba
+        for (byte[][] BB : cg.getCommGraphTable() ) {
+          for (byte[] B : BB ) {
+            clientOutput.writeInt(B.length);
+            clientOutput.write(B,0,B.length);
+          }
         }
-      }
 
 
-      // 5. Bob rzuca monetą
-      // TODO read
+        // 5. Bob rzuca monetą
+        if (clientInput.readByte() == 1) { |
+          // 6. Ujawnia cykl Hamiltona w G' - tablica, wart. losowe, f. haszująca
+          //TODO
 
-        // 6. Ujawnia cykl Hamiltona w G'
-
-        // 6. Ujawnia G' + numeracja w i k
-
-
-    //}
+        }
+        else {
+          // 6. Ujawnia G' + numeracja w i k // macierz grafu
+          for (boolean[] B : isoGraph.getGraphTable() ) {          //G'
+            for (boolean BB : B ) {
+              clientOutput.writeBoolean(BB);
+            }
+          }
+          iso.forEach(v -> {                                       //izomorfizm
+            try{
+              clientOutput.writeInt(v);
+            } catch(IOException ioE) {
+              ioE.printStackTrace();
+            }
+          });
+          //TODO randVals, isoRands, hashFunction
+          for ( byte[] B : cg.getGraphSeeds() ) {
+            clientOutput.write(B,0,B.length);
+          }
+          cg.getIsoSeeds().forEach(s -> {
+            try {
+              //TODO DOKOŃCZYĆ
+            } catch(IOException e) {
+              e.printStackTrace();
+            }
+          })
+        }
+      //}
 
     serverSocket.close();
     clientSocket.close();
