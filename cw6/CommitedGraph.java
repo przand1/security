@@ -26,6 +26,7 @@ public class CommitedGraph {
 
   // Alice wysyła zakryty graf do Boba
   public byte[][][] getCommGraphTable() {return commGraphTable;}
+  public List<byte[]> getCommIsomorph() {return commIsomorph;}
 
   // przypadek 1: ujawnij cykl Hamiltona:
   // public byte[][][] getHCHashes() {
@@ -33,7 +34,6 @@ public class CommitedGraph {
   // }
 
   //przypadek 2: ujawnij graf i izomorfizm:
-  public List<byte[]> getCommIsomorph() {return commIsomorph;}
   public byte[][] getGraphSeeds() {return graphSeeds;}
   public byte[] getIsoSeeds() {return isoSeeds;}
   //
@@ -57,11 +57,10 @@ public class CommitedGraph {
     graphSeeds = new byte[verts][verts];
     for (byte[] row : graphSeeds ) {
       rand.nextBytes(row);
-      for (byte b : row ) {
     }
-    isoSeeds = new byte[verts];
-    rand.nextBytes(isoSeeds);
-  }
+      isoSeeds = new byte[verts];
+      rand.nextBytes(isoSeeds);
+    }
 
   // zakryj co trzeba
   /*

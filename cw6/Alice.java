@@ -29,9 +29,11 @@ public class Alice {
     HGraph G = new HGraph(VERTS,EDGES);
     G.generate();
 
+
       // Wizualizacja
-      System.out.println("BASE_G_CYCLE: "+G.getHCycle().toString());
+      System.out.println("\n### Graf podstawowy ###");
       gp.printGraph(G.getGraphTable());
+      System.out.println("\n### Cykl Hamiltona ###\n"+G.getHCycle().toString());
 
     // 2. Bob zna G bez cyklu
     clientOutput.writeInt(VERTS); // rozmiar grafus
@@ -40,22 +42,34 @@ public class Alice {
         clientOutput.writeBoolean(BB);
       }
     }
+    System.out.println("\nGraf wysłany.");
 
     // 5 rund
     //for (int i=0;i<5 ;i++ ) {
 
         // 3a. Alice generuje graf izomorficzny
         List<Integer> iso = G.isomorphism();
-          System.out.println("ISO: "+iso.toString());
+          System.out.println("\n### Izomorfizm ###\n"+iso.toString());
         HGraph isoGraph = new HGraph(G,iso);
-          System.out.println("ISO_G_CYCLE: "+isoGraph.getHCycle().toString());
+          System.out.println("\n### Graf izomorficzny ###");
           gp.printGraph(isoGraph.getGraphTable());
+          System.out.println("### Cykl Hamiltona ###\n"+isoGraph.getHCycle().toString());
 
         // 3b. Alice wykonuje zobowiązanie bitowe dla M_G oraz numeracji wierszy i kolumn
         CommitedGraph cg = new CommitedGraph("SHA-256"); // macierz grafu
         cg.loadGraph(isoGraph,iso);
         cg.commit();
+          System.out.println("\n### Tabela wartości losowych ###");
+          gp.printVals(cg.getGraphSeeds());
+          System.out.println("\n### Graf zakryty ###");
           gp.printGraph(cg.getCommGraphTable());
+          System.out.println("\n### Numeracja zakryta ###");
+          cg.getCommIsomorph().forEach(v -> {
+              for (byte by : v ) {
+                System.out.printf("0x%02X ",by);
+              }System.out.print(" | ");
+          });
+          System.out.println();
 
         // 4. Wysyła zakryty graf do Boba
         for (byte[][] BB : cg.getCommGraphTable() ) {
@@ -64,39 +78,46 @@ public class Alice {
             clientOutput.write(B,0,B.length);
           }
         }
+        System.out.println("\nZakryty graf wysłany.");
+        //  Wysyłanie numeracji
+        cg.getCommIsomorph().forEach(v -> {
+          try {
+            clientOutput.writeInt(v.length);
+            clientOutput.write(v);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        });
+        System.out.println("\nZakryta numeracja wysłana.");
 
 
         // 5. Bob rzuca monetą
-        if (clientInput.readByte() == 1) { |
+        if (clientInput.readByte() == 1) {
           // 6. Ujawnia cykl Hamiltona w G' - tablica, wart. losowe, f. haszująca
           //TODO
 
         }
         else {
           // 6. Ujawnia G' + numeracja w i k // macierz grafu
-          for (boolean[] B : isoGraph.getGraphTable() ) {          //G'
+          System.out.println("\nUjawnić G' + numeracja w i k");
+          for (boolean[] B : isoGraph.getGraphTable() ) {          // G'
             for (boolean BB : B ) {
               clientOutput.writeBoolean(BB);
             }
           }
-          iso.forEach(v -> {                                       //izomorfizm
+          iso.forEach(v -> {                                       // izomorfizm - numeracja
             try{
               clientOutput.writeInt(v);
             } catch(IOException ioE) {
               ioE.printStackTrace();
             }
           });
-          //TODO randVals, isoRands, hashFunction
-          for ( byte[] B : cg.getGraphSeeds() ) {
+          for ( byte[] B : cg.getGraphSeeds() ) { // randVals
             clientOutput.write(B,0,B.length);
           }
-          cg.getIsoSeeds().forEach(s -> {
-            try {
-              //TODO DOKOŃCZYĆ
-            } catch(IOException e) {
-              e.printStackTrace();
-            }
-          })
+          clientOutput.write(cg.getIsoSeeds());  // isoRands
+          clientOutput.writeUTF("SHA-256"); // hash func.
+
         }
       //}
 
