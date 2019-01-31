@@ -121,15 +121,21 @@ public class Bob {
         if (ok) {
           System.out.println("Zakryty graf prawidłowy.");
         }
-        else System.out.println("Zakryty graf nieprawidłowy.");
+        else {
+          System.out.println("Zakryty graf nieprawidłowy.");
+          System.out.println("Zrywam połączenie");
+          clientSocket.close();
+        }
 
         System.out.println("Haszowanie...");
         List<byte[]> newCommitedIso = commitIsomorph(isoRands,iso,hashFunc);
         ok = true;
         out2:
-        for (byte[] b : commG1Iso ) {
-          for (int i = 0;i < b.length ; i++ ) {
-            if (b[i] != newCommitedIso.get(commG1Iso.indexOf(b))[i]) {  // TODO TU MUSI BYĆ BŁĄD !!!!
+        for (int i = 0;i < commG1Iso.size() ; i++ ) {
+          byte[] b1 = commG1Iso.get(i);
+          byte[] b2 = newCommitedIso.get(i);
+          for (int j = 0;j < b1.length ; j++ ) {
+            if (b1[j] != b2[j]) {
               ok = false;
               break out2;
             }
@@ -138,7 +144,11 @@ public class Bob {
         if (ok) {
           System.out.println("Numeracja prawidłowa.");
         }
-        else System.out.println("Numeracja nieprawidłowa.");
+        else {
+          System.out.println("Numeracja nieprawidłowa.");
+          System.out.println("Zrywam połączenie");
+          clientSocket.close();
+        }
 
         System.out.println("Sprawdzanie izomorfizmu...");
         boolean[][] newGT = new boolean[verts][verts];
@@ -146,19 +156,22 @@ public class Bob {
         out3:
         for (int i = 0; i < verts ; i++ ) { // for each odpada, potrzebne numery indeksów
           for (int j = 0;j < verts ; j++ ) {
-            //newGT[i][j] = G[iso.get(i)][iso.get(j)];
+            newGT[i][j] = G[iso.get(i)][iso.get(j)];
             if (G1[i][j] != G[iso.get(i)][iso.get(j)]) {
               ok = false;
-              break out3;
+              // break out3;
             }
           }
         }
-        //gp.printGraph(newGT);
+        gp.printGraph(newGT);
         if (ok) {
           System.out.println("Graf jest izomorficzny.");
         }
-        else System.out.println("Graf nie jest izomorficzny.");
-
+        else {
+          System.out.println("Graf nie jest izomorficzny.");
+          System.out.println("Zrywam połączenie");
+          clientSocket.close();
+        }
 
       }
 

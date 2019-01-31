@@ -12,6 +12,7 @@ public class HGraph {
   private Random random;
   private int verts; // liczba wierzchołków
   private int edgeInserts; // liczba prób wstawienia dodatkowych krawędzi
+  private boolean[][] graphTableHCOnly;
 
   public List<Integer> getHCycle() { return hCycle; }
   public boolean[][] getGraphTable() { return graphTable; }
@@ -21,6 +22,14 @@ public class HGraph {
   public void setGraphTable(boolean[][] graphTable) {
     this.graphTable = graphTable;
   }
+  private void setGraphTableHCOnly() {
+    graphTableHCOnly = new boolean[verts][verts];
+    for (int i = 0;i < hCycle.size()-1 ;i++) {
+      graphTable[hCycle.get(i)][hCycle.get(i+1)] = true;
+      graphTable[hCycle.get(i+1)][hCycle.get(i)] = true;
+    }
+  }
+  public boolean[][] getGraphTableHCOnly() {return graphTableHCOnly;}
 
 // konstruktor nowego grafu
   public HGraph(int verts,int edgeInserts) {
@@ -43,7 +52,7 @@ public class HGraph {
     boolean[][] tempGT = base.getGraphTable();
     for (int i = 0; i < verts ; i++ ) { // for each odpada, potrzebne numery indeksów
       for (int j = 0;j < verts ; j++ ) {
-        if (tempGT[i][j]) graphTable[isomorph.get(i)][isomorph.get(j)] = true;
+        graphTable[i][j] = tempGT[isomorph.get(i)][isomorph.get(j)];
       }
     }
     // teraz jeszcze cykl
@@ -51,6 +60,8 @@ public class HGraph {
     for (int i : hc) {
       hCycle.add(isomorph.get(i));
     }
+    // na później
+    setGraphTableHCOnly();
   }
 
   public void generate() {

@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.List;
 import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class Alice {
 
@@ -61,6 +62,8 @@ public class Alice {
         cg.commit();
           System.out.println("\n### Tabela wartości losowych ###");
           gp.printVals(cg.getGraphSeeds());
+          System.out.println("\n### Wartości losowe numeracji ###");
+          System.out.println(Arrays.toString(cg.getIsoSeeds()));
           System.out.println("\n### Graf zakryty ###");
           gp.printGraph(cg.getCommGraphTable());
           System.out.println("\n### Numeracja zakryta ###");
@@ -95,6 +98,7 @@ public class Alice {
         if (clientInput.readByte() == 1) {
           // 6. Ujawnia cykl Hamiltona w G' - tablica, wart. losowe, f. haszująca
           //TODO
+          gp.printGraph(cg.getCommitedHamilton());
 
         }
         else {

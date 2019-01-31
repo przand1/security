@@ -1,6 +1,7 @@
 package cw6;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class GraphPrinter {
 
@@ -23,9 +24,7 @@ public class GraphPrinter {
   }
   public static void printVals(byte[][] vals) {
     for (byte[] b:vals) {
-      for (byte by : b ) {
-        System.out.printf("%d ",by);
-      }System.out.print("\n");
+      System.out.println(Arrays.toString(b));
     }
   }
 

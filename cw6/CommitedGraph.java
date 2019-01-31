@@ -24,14 +24,31 @@ public class CommitedGraph {
   private HGraph G; // graf bazowy, na którym będziemy pracować. Później można załadować kolejny.
   private List<Integer> isomorph; // izomorfizm z którego powstał graf bazowy
 
+
   // Alice wysyła zakryty graf do Boba
-  public byte[][][] getCommGraphTable() {return commGraphTable;}
-  public List<byte[]> getCommIsomorph() {return commIsomorph;}
+  public byte[][][] getCommGraphTable() { return commGraphTable; }
+  public List<byte[]> getCommIsomorph() { return commIsomorph; }
 
   // przypadek 1: ujawnij cykl Hamiltona:
-  // public byte[][][] getHCHashes() {
-  //
-  // }
+  public boolean[][] getPureHamilton() { return G.getGraphTableHCOnly(); }
+  public byte[][][] getCommitedHamilton() {
+    int verts = G.getVerts();
+    byte[][][] CH = new byte[verts][verts][];
+    boolean[][] PH = getPureHamilton();
+    for (int i = 0;i < verts ;i++ ) {
+      for (int j = 0;j < verts ;j++ ) {
+        if (PH[i][j]) {
+          CH[i][j] = commGraphTable[i][j];
+        }
+        else {
+          CH[i][j] = new byte[1];
+          CH[i][j][0] = 0;
+        }
+
+      }
+    }
+    return CH;
+  }
 
   //przypadek 2: ujawnij graf i izomorfizm:
   public byte[][] getGraphSeeds() {return graphSeeds;}
@@ -87,6 +104,7 @@ public class CommitedGraph {
   }
 
   private void commitGraph(int verts,boolean[][] gt) {
+    boolean[][][] tab = new boolean[verts][verts][];
     for (int i = 0;i < verts ;i++ ) {
       for (int j = 0;j < verts ;j++ ) {
         if (gt[i][j]) {
