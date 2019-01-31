@@ -32,12 +32,16 @@ public class CommitedGraph {
   // przypadek 1: ujawnij cykl Hamiltona:
   public boolean[][] getPureHamilton() { return G.getGraphTableHCOnly(); }
   public byte[][][] getCommitedHamilton() {
+    System.out.println("ENTERING");
     int verts = G.getVerts();
     byte[][][] CH = new byte[verts][verts][];
     boolean[][] PH = getPureHamilton();
+    GraphPrinter.printGraph(PH);
+    System.out.println("LOOPING");
     for (int i = 0;i < verts ;i++ ) {
       for (int j = 0;j < verts ;j++ ) {
         if (PH[i][j]) {
+          System.out.println("INSERTing");
           CH[i][j] = commGraphTable[i][j];
         }
         else {

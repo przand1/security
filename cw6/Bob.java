@@ -153,17 +153,21 @@ public class Bob {
         System.out.println("Sprawdzanie izomorfizmu...");
         boolean[][] newGT = new boolean[verts][verts];
         ok = true;
-        out3:
         for (int i = 0; i < verts ; i++ ) { // for each odpada, potrzebne numery indeksów
           for (int j = 0;j < verts ; j++ ) {
-            newGT[i][j] = G[iso.get(i)][iso.get(j)];
-            if (G1[i][j] != G[iso.get(i)][iso.get(j)]) {
-              ok = false;
-              // break out3;
-            }
+            newGT[iso.get(i)][iso.get(j)] = G[i][j];
           }
         }
         gp.printGraph(newGT);
+        System.out.println();
+        gp.printGraph(G1);
+        for (int i = 0; i < verts ; i++ ) { // for each odpada, potrzebne numery indeksów
+          for (int j = 0;j < verts ; j++ ) {
+            if (newGT[i][j] != G1[i][j]) {
+              ok = false;
+            }
+          }
+        }
         if (ok) {
           System.out.println("Graf jest izomorficzny.");
         }

@@ -25,9 +25,11 @@ public class HGraph {
   private void setGraphTableHCOnly() {
     graphTableHCOnly = new boolean[verts][verts];
     for (int i = 0;i < hCycle.size()-1 ;i++) {
-      graphTable[hCycle.get(i)][hCycle.get(i+1)] = true;
-      graphTable[hCycle.get(i+1)][hCycle.get(i)] = true;
+      graphTableHCOnly[hCycle.get(i)][hCycle.get(i+1)] = true;
+      graphTableHCOnly[hCycle.get(i+1)][hCycle.get(i)] = true;
     }
+    graphTableHCOnly[hCycle.get(0)][hCycle.get(verts-1)] = true;
+    graphTableHCOnly[hCycle.get(verts-1)][hCycle.get(0)] = true;
   }
   public boolean[][] getGraphTableHCOnly() {return graphTableHCOnly;}
 
@@ -52,7 +54,7 @@ public class HGraph {
     boolean[][] tempGT = base.getGraphTable();
     for (int i = 0; i < verts ; i++ ) { // for each odpada, potrzebne numery indeksów
       for (int j = 0;j < verts ; j++ ) {
-        graphTable[i][j] = tempGT[isomorph.get(i)][isomorph.get(j)];
+        graphTable[isomorph.get(i)][isomorph.get(j)] = tempGT[i][j];System.out.println("tempGT["+isomorph.get(i)+"]["+isomorph.get(j)+"] = "+tempGT[isomorph.get(i)][isomorph.get(j)]);
       }
     }
     // teraz jeszcze cykl
@@ -62,6 +64,8 @@ public class HGraph {
     }
     // na później
     setGraphTableHCOnly();
+    System.out.println("I AM COMPLETE t. isograph");
+    GraphPrinter.printGraph(graphTableHCOnly);
   }
 
   public void generate() {
