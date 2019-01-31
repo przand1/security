@@ -46,8 +46,8 @@ public class Alice {
     System.out.println("\nGraf wysłany.");
 
     // 5 rund
-    //for (int i=0;i<5 ;i++ ) {
-
+    for (int ii=0;ii<5 ;ii++ ) {
+        System.out.println("--------------------------------------- Runda "+ii+"---------------------------------------");
         // 3a. Alice generuje graf izomorficzny
         List<Integer> iso = G.isomorphism();
           System.out.println("\n### Izomorfizm ###\n"+iso.toString());
@@ -64,15 +64,15 @@ public class Alice {
           gp.printVals(cg.getGraphSeeds());
           System.out.println("\n### Wartości losowe numeracji ###");
           System.out.println(Arrays.toString(cg.getIsoSeeds()));
-          System.out.println("\n### Graf zakryty ###");
-          gp.printGraph(cg.getCommGraphTable());
-          System.out.println("\n### Numeracja zakryta ###");
-          cg.getCommIsomorph().forEach(v -> {
-              for (byte by : v ) {
-                System.out.printf("0x%02X ",by);
-              }System.out.print(" | ");
-          });
-          System.out.println();
+          // System.out.println("\n### Graf zakryty ###");
+          // gp.printGraph(cg.getCommGraphTable());
+          // System.out.println("\n### Numeracja zakryta ###");
+          // cg.getCommIsomorph().forEach(v -> {
+          //     for (byte by : v ) {
+          //       System.out.printf("0x%02X ",by);
+          //     }System.out.print(" | ");
+          // });
+          // System.out.println();
 
         // 4. Wysyła zakryty graf do Boba
         for (byte[][] BB : cg.getCommGraphTable() ) {
@@ -96,9 +96,20 @@ public class Alice {
 
         // 5. Bob rzuca monetą
         if (clientInput.readByte() == 1) {
+          System.out.println("Ujawnić cykl Hamiltona");
           // 6. Ujawnia cykl Hamiltona w G' - tablica, wart. losowe, f. haszująca
-          //TODO
-          gp.printGraph(cg.getCommitedHamilton());
+          System.out.println("Wysyłanie cyklu...");
+          for (boolean[] B : cg.getPureHamilton()) {
+            for (boolean BB : B ) {
+              clientOutput.writeBoolean(BB);
+            }
+          }
+          System.out.println("Wysyłanie wartości losowych...");
+          for (byte[] B : cg.getHCSeeds()) {
+            clientOutput.write(B,0,B.length);
+          }
+          System.out.println("Wysyłanie funkcji haszującej...");
+          clientOutput.writeUTF("SHA-256");
 
         }
         else {
@@ -123,7 +134,7 @@ public class Alice {
           clientOutput.writeUTF("SHA-256"); // hash func.
 
         }
-      //}
+      }
 
     serverSocket.close();
     clientSocket.close();

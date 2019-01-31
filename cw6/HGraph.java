@@ -54,7 +54,7 @@ public class HGraph {
     boolean[][] tempGT = base.getGraphTable();
     for (int i = 0; i < verts ; i++ ) { // for each odpada, potrzebne numery indeksów
       for (int j = 0;j < verts ; j++ ) {
-        graphTable[isomorph.get(i)][isomorph.get(j)] = tempGT[i][j];System.out.println("tempGT["+isomorph.get(i)+"]["+isomorph.get(j)+"] = "+tempGT[isomorph.get(i)][isomorph.get(j)]);
+        graphTable[isomorph.get(i)][isomorph.get(j)] = tempGT[i][j];
       }
     }
     // teraz jeszcze cykl
@@ -64,8 +64,6 @@ public class HGraph {
     }
     // na później
     setGraphTableHCOnly();
-    System.out.println("I AM COMPLETE t. isograph");
-    GraphPrinter.printGraph(graphTableHCOnly);
   }
 
   public void generate() {
